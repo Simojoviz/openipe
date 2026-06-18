@@ -155,12 +155,10 @@ reg  [15:0] IPE_ACTIVE;
 // 4) DATA OUTPUT GENERATION
 //============================================================================
 
-`ifndef OMIT_IPE_FIXES
-  reg [15:0] buff_pc;
-  always @(posedge mclk or posedge puc_rst)
-    if (puc_rst) buff_pc <= 0;
-    else if (fe_decode) buff_pc <= fe_pc;
-`endif
+reg [15:0] buff_pc;
+always @(posedge mclk or posedge puc_rst)
+  if (puc_rst) buff_pc <= 0;
+  else if (fe_decode) buff_pc <= fe_pc;
 
 always @(posedge mclk or posedge puc_rst)
   if (puc_rst)     ipe_bootcode_exec <= 1;
@@ -172,11 +170,7 @@ begin
 end
 endfunction
 
-`ifndef OMIT_IPE_FIXES
   wire      pc_in_ipe = address_in_ipe (buff_pc);
-`else
-  wire      pc_in_ipe = address_in_ipe (fe_pc);
-`endif
 
 wire    eu_mem_in_ipe = address_in_ipe (eu_mab);
 wire       dma_in_ipe = address_in_ipe (dma_addr);
